@@ -139,7 +139,7 @@ export function findIndex<T>(collection: Array<T>, predicate: FindIndexPredicate
 
 // ### findLastIndex
 // findLastIndex works line findIndex, but traverses the collection backwards.
-// The index from where we start traversing the array.
+// The third argument is the index from where we start traversing the array.
 export function findLastIndex<T>(collection: Array<T>, predicate: FindIndexPredicate<T>, fromIndex: number = collection.length - 1): number {
   for (let i = fromIndex; i > 0; i--) {
     if (predicate(collection[i], i, collection)) {
