@@ -10,13 +10,13 @@
 
 // ## Array functions
 
-function clamp(n: number, lower: number, upper: number): number {
+export function clamp(n: number, lower: number, upper: number): number {
   if (n < lower) return lower;
   if (n > upper) return upper;
   return n;
 }
 
-function slice<T>(collection: Array<T>, start: number = 0, end: number = collection.length): Array<T> {
+export function slice<T>(collection: Array<T>, start: number = 0, end: number = collection.length): Array<T> {
   const result: T[] = [];
 
   end = clamp(end < 0 ? (collection.length + end) : end, 0, collection.length);
