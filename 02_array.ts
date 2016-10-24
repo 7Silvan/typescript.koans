@@ -124,6 +124,10 @@ export interface FindIndexPredicate<T> {
 }
 
 // ### findIndex
+// findIndex accepts three arguments:
+// 1. The array to be traversed.
+// 2. An iteratee function.
+// 3. The index from where we should start traversing the array.
 export function findIndex<T>(collection: Array<T>, predicate: FindIndexPredicate<T>, fromIndex: number = 0): number {
   for (let i = fromIndex; i < collection.length; i++) {
     if (predicate(collection[i], i, collection)) {
@@ -135,6 +139,7 @@ export function findIndex<T>(collection: Array<T>, predicate: FindIndexPredicate
 
 // ### findLastIndex
 // findLastIndex works line findIndex, but traverses the collection backwards.
+// The index from where we start traversing the array.
 export function findLastIndex<T>(collection: Array<T>, predicate: FindIndexPredicate<T>, fromIndex: number = collection.length - 1): number {
   for (let i = fromIndex; i > 0; i--) {
     if (predicate(collection[i], i, collection)) {
