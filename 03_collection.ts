@@ -83,12 +83,32 @@ interface ArrayFilterIteratee<T> {
   (value?: T, index?: number, collection?: Array<T>): boolean;
 }
 
-export function filter<T>(collection: Array<T>, iteratee: ArrayFilterIteratee<T>): Array<T> {
-  const results: Array<T> = [];
-  for (let i = 0; i < collection.length; i++) {
-    const value = collection[i];
-    if (iteratee(value, i, collection)) {
-      results.push(value);
+interface DictionaryFilterIteratee<T> {
+  (value?: T, key?: string, collection?: Dictionary<T>): boolean;
+}
+
+export function filter<T>(collection: Array<T>, iteratee: ArrayFilterIteratee<T>): Array<T>;
+export function filter<T>(collection: Dictionary<T>, iteratee: DictionaryFilterIteratee<T>): Dictionary<T>;
+
+export function filter<T>(collection, iteratee): Array<T> | Dictionary<T> {
+  if (collection instanceof Array) {
+    const results: Array<T> = [];
+    for (let i = 0; i < collection.length; i++) {
+      const value = collection[i];
+      if (iteratee(value, i, collection)) {
+        results.push(value);
+      }
+    }
+    return results;
+  }
+
+  const results: Dictionary<T> = {};
+  const keys: string[] = Object.keys(collection);
+  for (let i = 0; i < keys.length; i++) {
+    const key: string = keys[i];
+    const value: T = collection[key];
+    if (iteratee(value, key, collection)) {
+      results[key] = value;
     }
   }
   return results;

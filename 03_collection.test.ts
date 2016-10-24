@@ -100,4 +100,41 @@ describe("03_collection", function () {
       });
     });
   });
+
+  describe("filter", function () {
+    context("when collection is an array", function () {
+      context("when iteratee always returns true", function () {
+        it("should return copy of array", function () {
+          const collection = [1, 2, 3];
+          const iteratee = sinon.stub().returns(true);
+          expect(_.filter<number>(collection, iteratee)).to.deep.equal([1, 2, 3]);
+        });
+      });
+
+      context("when iteratee returns false", function () {
+        it("should ignore item", function () {
+          const collection = [1, 2, 3, 4, 1, 2];
+          const iteratee = x => x < 3;
+          expect(_.filter<number>(collection, iteratee)).to.deep.equal([1, 2, 1, 2]);
+        });
+      });
+    });
+
+    context("when collection is an object", function () {
+      context("when iteratee always returns true", function () {
+        it("should return true", function () {
+          const collection: _.Dictionary<number> = {
+            'a': 1,
+            'b': 2,
+            'c': 3
+          };
+          const iteratee = (v, k) => !(v === 2 && k === 'b');
+          expect(_.filter<number>(collection, iteratee)).to.deep.equal({
+            'a': 1,
+            'c': 3
+          });
+        });
+      });
+    });
+  });
 });
