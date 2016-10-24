@@ -10,6 +10,25 @@
 
 // ## Array functions
 
+function clamp(n: number, lower: number, upper: number): number {
+  if (n < lower) return lower;
+  if (n > upper) return upper;
+  return n;
+}
+
+function slice<T>(collection: Array<T>, start: number = 0, end: number = collection.length): Array<T> {
+  const result: T[] = [];
+
+  end = clamp(end < 0 ? (collection.length + end) : end, 0, collection.length);
+  start = clamp(start < 0 ? (collection.length + start) : start, 0, collection.length);
+
+  for (let i = start; i < end; i++) {
+    result.push(collection[i]);
+  }
+
+  return result;
+}
+
 // ### chunk
 // chunk creates an array of elements split into groups the length of size. If
 // array can't be split evenly, the final chunk will be the remaining elements.
@@ -17,7 +36,7 @@
 export function chunk<T>(collection: Array<T>, size: number = 1): T[][] {
   const result: T[][] = new Array(Math.ceil(collection.length / size));
   for (let i = 0; i < result.length; i++) {
-    result[i] = collection.slice(i * size, (i + 1) * size);
+    result[i] = slice<T>(collection, i * size, (i + 1) * size);
   }
   return result;
 }
@@ -39,7 +58,7 @@ export function head<T>(collection: Array<T>): T {
 // ### initial
 // initial returns a slice of the passed in array, excluding its last item.
 export function initial<T>(collection: Array<T>): Array<T> {
-  return collection.slice(0, -1);
+  return slice(collection, 0, -1);
 }
 
 // ### last
@@ -53,14 +72,14 @@ export function last<T>(collection: Array<T>): T {
 // has count items removed from the beginning.
 // The count should be optional and default to 1.
 export function drop<T>(collection: Array<T>, count: number = 1): Array<T> {
-  return collection.slice(count);
+  return slice(collection, count);
 }
 
 // ### dropRight
 // dropRight works like drop, except that it removes items from the end of the 
 // passed in array.
 export function dropRight<T>(collection: Array<T>, count: number = 1): Array<T> {
-  return collection.slice(0, collection.length - count);
+  return slice(collection, 0, collection.length - count);
 }
 
 interface DropWhilePredicate<T> {
@@ -75,7 +94,7 @@ export function dropWhile<T>(collection: Array<T>, predicate: DropWhilePredicate
   while (index < collection.length && predicate(collection[index], index, collection)) {
     index++;
   }
-  return collection.slice(index);
+  return slice(collection, index);
 }
 
 // ### dropRightWhile
@@ -86,7 +105,7 @@ export function dropRightWhile<T>(collection: Array<T>, predicate: DropWhilePred
   while (index >= 0 && predicate(collection[index], index, collection)) {
     index--;
   }
-  return collection.slice(0, index + 1);
+  return slice(collection, 0, index + 1);
 }
 
 // ### fill
