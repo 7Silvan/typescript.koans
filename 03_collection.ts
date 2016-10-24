@@ -47,25 +47,43 @@ export function forEach<T>(collection, iteratee) {
   }
 }
 
-interface EveryIteratee<T> {
+interface DictionaryEveryIteratee<T> {
+  (value?: T, key?: string, collection?: Dictionary<T>): boolean;
+}
+
+interface ArrayEveryIteratee<T> {
   (value?: T, index?: number, collection?: Array<T>): boolean;
 }
 
-export function every<T>(collection: Array<T>, iteratee: EveryIteratee<T>): boolean {
-  for (let i = 0; i < collection.length; i++) {
-    if (!iteratee(collection[i], i, collection)) {
-      return false;
+export function every<T>(collection: Array<T>, iteratee: ArrayEveryIteratee<T>): boolean;
+export function every<T>(collection: Dictionary<T>, iteratee: DictionaryEveryIteratee<T>): boolean;
+
+export function every<T>(collection, iteratee): boolean {
+  if (collection instanceof Array) {
+    for (let i = 0; i < collection.length; i++) {
+      if (!iteratee(collection[i], i, collection)) {
+        return false;
+      }
+    }
+  } else {
+    const keys: string[] = Object.keys(collection);
+    for (let i = 0; i < keys.length; i++) {
+      const key: string = keys[i];
+      const value: T = collection[key];
+      if (!iteratee(value, key, collection)) {
+        return false;
+      }
     }
   }
   return true;
 }
 
 // Identical to EveryIteratee.
-interface FilterIteratee<T> {
+interface ArrayFilterIteratee<T> {
   (value?: T, index?: number, collection?: Array<T>): boolean;
 }
 
-export function filter<T>(collection: Array<T>, iteratee: FilterIteratee<T>): Array<T> {
+export function filter<T>(collection: Array<T>, iteratee: ArrayFilterIteratee<T>): Array<T> {
   const results: Array<T> = [];
   for (let i = 0; i < collection.length; i++) {
     const value = collection[i];
