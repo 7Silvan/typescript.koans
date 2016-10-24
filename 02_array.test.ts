@@ -133,6 +133,12 @@ describe("02_array", function () {
       });
     });
 
+    context("when predicate returns true on multiple items", function () {
+      it("should return last index", function () {
+        expect(_.findLastIndex([ 4, 6, 8, 6, 10 ], value => value === 6)).to.be.equal(3);
+      });
+    });
+
     context("when startIndex > index of first match", function () {
       it("should return index of second match", function () {
         expect(_.findLastIndex([ 4, 6, 6, 8, 10 ], value => value === 6, 1)).to.be.equal(1);
